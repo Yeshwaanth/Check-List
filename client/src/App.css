@@ -1,0 +1,185 @@
+.app-shell {
+    max-width: 1050px;
+    margin: auto;
+    padding: 72px 24px
+}
+
+header {
+    max-width: 650px;
+    margin-bottom: 34px
+}
+
+.eyebrow {
+    color: #6a5acd;
+    font-size: .76rem;
+    font-weight: 700;
+    letter-spacing: .13em
+}
+
+h1 {
+    font-size: clamp(2.3rem, 5vw, 4.4rem);
+    letter-spacing: -.065em;
+    line-height: .98;
+    margin: 10px 0 16px
+}
+
+.subtitle,
+.progress,
+.empty {
+    color: #777187
+}
+
+.subtitle {
+    font-size: 1.08rem
+}
+
+input {
+    border: 1px solid #d9d6e7;
+    border-radius: 9px;
+    padding: 11px 13px;
+    font: inherit;
+    min-width: 0
+}
+
+input:focus {
+    outline: 3px solid #dfdbff;
+    border-color: #6a5acd
+}
+
+button {
+    border: 0;
+    border-radius: 9px;
+    background: #382e80;
+    color: #fff;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+    padding: 11px 15px
+}
+
+.create-form,
+.add-item,
+.inline-form {
+    display: flex;
+    gap: 9px
+}
+
+.create-form {
+    max-width: 570px;
+    margin-bottom: 28px
+}
+
+.create-form input,
+.add-item input,
+.inline-form {
+    flex: 1
+}
+
+.checklist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    gap: 18px
+}
+
+.checklist-card {
+    background: #fff;
+    padding: 23px;
+    border: 1px solid #e5e2ee;
+    border-radius: 16px;
+    box-shadow: 0 7px 24px #2e245a0d
+}
+
+.card-heading {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px
+}
+
+.card-heading h2 {
+    margin: 0;
+    font-size: 1.2rem
+}
+
+.progress {
+    font-size: .84rem;
+    margin: 6px 0 16px
+}
+
+.item-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 16px
+}
+
+.item-list li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0eef5
+}
+
+.item-list span {
+    flex: 1
+}
+
+.done span {
+    color: #918ca1;
+    text-decoration: line-through
+}
+
+.item-list input[type=checkbox] {
+    min-width: auto;
+    accent-color: #5a4bb7
+}
+
+.mini-button,
+.text-button {
+    background: transparent;
+    color: #5a5570;
+    padding: 3px 5px;
+    font-size: .8rem
+}
+
+.mini-button:hover,
+.text-button:hover {
+    background: #f0eff8;
+    color: #382e80
+}
+
+.danger:hover {
+    color: #b8324f
+}
+
+.item-edit input {
+    width: 100%;
+    padding: 5px 7px
+}
+
+.error {
+    display: flex;
+    justify-content: space-between;
+    max-width: 570px;
+    background: #fff0f2;
+    border: 1px solid #ffc9d1;
+    color: #9d2440;
+    padding: 10px 13px;
+    border-radius: 9px;
+    margin-bottom: 20px
+}
+
+.error button {
+    padding: 0 5px;
+    background: transparent;
+    color: inherit
+}
+
+@media(max-width:540px) {
+    .app-shell {
+        padding: 42px 17px
+    }
+
+    .create-form {
+        flex-direction: column
+    }
+}

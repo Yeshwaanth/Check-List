@@ -4,9 +4,16 @@
     padding: 72px 24px
 }
 
-header {
-    max-width: 650px;
-    margin-bottom: 34px
+.app-header {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    gap: 32px;
+    margin-bottom: 30px
+}
+
+.app-header > div {
+    max-width: 650px
 }
 
 .eyebrow {
@@ -69,6 +76,29 @@ button {
     margin-bottom: 28px
 }
 
+.page-nav {
+    display: flex;
+    flex: none;
+    gap: 4px;
+    margin: 0;
+    padding: 4px;
+    background: #efedff;
+    border: 1px solid #dfdbff;
+    border-radius: 12px
+}
+
+.page-nav button {
+    background: transparent;
+    border-radius: 8px;
+    color: #777187;
+    padding: 10px 14px
+}
+
+.page-nav button.active {
+    background: #382e80;
+    color: #fff
+}
+
 .create-form input,
 .add-item input,
 .inline-form {
@@ -77,7 +107,7 @@ button {
 
 .checklist-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 18px
 }
 
@@ -113,7 +143,7 @@ button {
 
 .item-list li {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 8px;
     padding: 8px 0;
     border-bottom: 1px solid #f0eef5
@@ -121,6 +151,26 @@ button {
 
 .item-list span {
     flex: 1
+}
+
+.item-copy {
+    flex: 1;
+    min-width: 0
+}
+
+.item-copy span,
+.item-copy small {
+    display: block
+}
+
+.item-copy small {
+    color: #9993a8;
+    font-size: .72rem;
+    margin-top: 2px
+}
+
+.item-copy .due-date {
+    color: #6254b8
 }
 
 .done span {
@@ -156,6 +206,227 @@ button {
     padding: 5px 7px
 }
 
+.item-edit-form {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    gap: 5px
+}
+
+.task-form {
+    display: grid;
+    gap: 10px;
+    width: 100%
+}
+
+.task-form label {
+    color: #777187;
+    display: grid;
+    font-size: .78rem;
+    gap: 4px
+}
+
+.task-form input,
+.task-form button {
+    width: 100%
+}
+
+.task-form .mini-button,
+.task-form .text-button {
+    text-align: left;
+    width: max-content
+}
+
+.task-edit {
+    flex: 1;
+    min-width: 0
+}
+
+.item-edit-form input:first-child {
+    min-width: 0;
+    flex: 1
+}
+
+.item-edit-form input[type=date],
+.add-item input[type=date] {
+    padding: 9px 7px;
+    font-size: .8rem
+}
+
+.calendar-page {
+    background: #fff;
+    border: 1px solid #e5e2ee;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 7px 24px #2e245a0d
+}
+
+.calendar-header {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 22px
+}
+
+.calendar-header h2 {
+    font-size: 1.5rem;
+    margin: 3px 0
+}
+
+.calendar-header p:not(.eyebrow) {
+    color: #777187;
+    font-size: .88rem;
+    margin: 0
+}
+
+.month-controls { display: flex; gap: 6px }
+.month-controls button { padding: 8px 11px }
+
+.calendar-weekdays,
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr))
+}
+
+.calendar-weekdays span {
+    color: #777187;
+    font-size: .75rem;
+    font-weight: 700;
+    padding: 0 7px 7px;
+    text-align: right
+}
+
+.calendar-day {
+    border: 1px solid #eeeaf5;
+    min-height: 112px;
+    padding: 7px
+}
+
+.calendar-blank { background: #faf9fd }
+
+.day-number {
+    color: #777187;
+    display: block;
+    font-size: .76rem;
+    margin-bottom: 6px;
+    text-align: right
+}
+
+.today .day-number {
+    color: #382e80;
+    font-weight: 800
+}
+
+.calendar-task {
+    background: var(--task-bg, #e8e5ff);
+    border-left: 3px solid var(--task-border, #6556c5);
+    border-radius: 3px;
+    color: var(--task-text, #332b72);
+    font-size: .7rem;
+    margin: 3px 0;
+    overflow: hidden;
+    padding: 4px 5px;
+    text-overflow: ellipsis;
+    white-space: nowrap
+}
+
+.calendar-complete {
+    filter: saturate(.35);
+    opacity: .72;
+    text-decoration: line-through
+}
+
+.calendar-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 14px;
+    margin: 0 0 18px
+}
+
+.calendar-legend span {
+    align-items: center;
+    color: #5f596e;
+    display: inline-flex;
+    font-size: .78rem;
+    gap: 6px
+}
+
+.calendar-legend i {
+    border-radius: 50%;
+    display: inline-block;
+    height: 9px;
+    width: 9px
+}
+
+.monthly-plan {
+    background: #efedff;
+    border: 1px solid #dfdbff;
+    border-radius: 16px;
+    margin-bottom: 25px;
+    padding: 20px 23px
+}
+
+.monthly-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px
+}
+
+.monthly-heading .eyebrow {
+    margin: 0 0 4px
+}
+
+.monthly-heading h2 {
+    margin: 0;
+    font-size: 1.25rem
+}
+
+.task-count {
+    color: #51469b;
+    font-size: .85rem;
+    font-weight: 700
+}
+
+.monthly-plan ul {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+    margin: 18px 0 0;
+    padding: 0
+}
+
+.monthly-plan li {
+    background: #fff;
+    border-radius: 10px;
+    padding: 10px
+}
+
+.monthly-plan time,
+.monthly-plan small {
+    color: #777187;
+    display: block;
+    font-size: .75rem
+}
+
+.monthly-plan strong {
+    display: block;
+    font-size: .9rem;
+    margin: 3px 0
+}
+
+.completed-task {
+    color: #918ca1;
+    text-decoration: line-through
+}
+
+.monthly-empty {
+    color: #777187;
+    margin: 15px 0 0
+}
+
 .error {
     display: flex;
     justify-content: space-between;
@@ -174,6 +445,18 @@ button {
     color: inherit
 }
 
+@media(max-width:760px) {
+    .app-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 18px
+    }
+
+    .checklist-grid {
+        grid-template-columns: 1fr
+    }
+}
+
 @media(max-width:540px) {
     .app-shell {
         padding: 42px 17px
@@ -182,4 +465,18 @@ button {
     .create-form {
         flex-direction: column
     }
+
+    .add-item {
+        flex-wrap: wrap
+    }
+
+    .add-item input:first-child {
+        flex-basis: 100%
+    }
+
+    .calendar-page { padding: 14px }
+    .calendar-header { align-items: flex-start; flex-direction: column }
+    .calendar-day { min-height: 78px; padding: 4px }
+    .calendar-task { font-size: .62rem; padding: 3px }
+    .calendar-weekdays span { font-size: .63rem; padding: 0 3px 5px }
 }

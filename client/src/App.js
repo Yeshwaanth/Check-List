@@ -1,6 +1,7 @@
 import "./App.css";
 import { useEffect, useState } from "react";
 import ChecklistCard from "./components/ChecklistCard";
+import MonthlyPlan from "./components/MonthlyPlan";
 import { checklistApi } from "./api/checklistApi";
 
 function App() {
@@ -14,6 +15,7 @@ function ChecklistApp() {
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [page, setPage] = useState("checklists");
   const load = async () => {
     try {
       setChecklists(await checklistApi.list());
@@ -33,8 +35,8 @@ function ChecklistApp() {
     );
   const actions = {
     name: async (id, value) => replace(await checklistApi.update(id, value)),
-    addItem: async (id, title) =>
-      replace(await checklistApi.addItem(id, title)),
+    addItem: async (id, title, startDate, endDate) =>
+      replace(await checklistApi.addItem(id, title, startDate, endDate)),
     item: async (id, itemId, changes) =>
       replace(await checklistApi.updateItem(id, itemId, changes)),
     removeItem: async (id, itemId) => {
@@ -55,13 +57,20 @@ function ChecklistApp() {
   };
   return (
     <main className="app-shell">
-      <header>
-        <p className="eyebrow">ORGANIZE YOUR DAY</p>
-        <h1>Checklists, simply done.</h1>
-        <p className="subtitle">
-          Small lists. Clear progress. Less to hold in your head.
-        </p>
+      <header className="app-header">
+        <div>
+          <p className="eyebrow">ORGANIZE YOUR DAY</p>
+          <h1>TaskCanvas</h1>
+          <p className="subtitle">
+            Plan your tasks. See your time. Make progress visible.
+          </p>
+        </div>
+        <nav className="page-nav" aria-label="Main navigation">
+          <button className={page === "checklists" ? "active" : ""} aria-current={page === "checklists" ? "page" : undefined} onClick={() => setPage("checklists")}>Checklists</button>
+          <button className={page === "calendar" ? "active" : ""} aria-current={page === "calendar" ? "page" : undefined} onClick={() => setPage("calendar")}>Calendar</button>
+        </nav>
       </header>
+      {page === "checklists" && <>
       <form className="create-form" onSubmit={create}>
         <input
           aria-label="New checklist name"
@@ -80,7 +89,7 @@ function ChecklistApp() {
       {loading ? (
         <p className="empty">Loading your checklists…</p>
       ) : checklists.length ? (
-        <section className="checklist-grid">
+          <section className="checklist-grid">
           {[...checklists]
             .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
             .map((list) => (
@@ -95,10 +104,11 @@ function ChecklistApp() {
                 }}
               />
             ))}
-        </section>
+          </section>
       ) : (
         <p className="empty">Your first checklist is waiting to be made.</p>
-      )}
+      )}</>}
+      {page === "calendar" && (loading ? <p className="empty">Loading your monthly plan…</p> : <MonthlyPlan checklists={checklists} />)}
     </main>
   );
 }

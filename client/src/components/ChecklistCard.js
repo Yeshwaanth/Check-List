@@ -1,152 +1,21 @@
 import { useState } from "react";
 
-export default function ChecklistCard({
-  checklist,
-  actions,
-  onDelete,
-  onError,
-}) {
-  const [newItem, setNewItem] = useState("");
-  const [editingId, setEditingId] = useState(null);
-  const [editValue, setEditValue] = useState("");
-  const [editingName, setEditingName] = useState(false);
-  const [name, setName] = useState(checklist.name);
-  const run = async (work) => {
-    try {
-      await work();
-    } catch (error) {
-      onError(error.message);
-    }
-  };
-  const completeCount = checklist.items.filter((item) => item.completed).length;
-  return (
-    <article className="checklist-card">
-      <div className="card-heading">
-        {editingName ? (
-          <form
-            className="inline-form"
-            onSubmit={(event) => {
-              event.preventDefault();
-              if (name.trim())
-                run(async () => {
-                  await actions.name(checklist._id, name.trim());
-                  setEditingName(false);
-                });
-            }}
-          >
-            <input
-              aria-label="Checklist name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              autoFocus
-            />
-            <button className="text-button">Save</button>
-          </form>
-        ) : (
-          <>
-            <h2>{checklist.name}</h2>
-            <div>
-              <button
-                className="mini-button"
-                onClick={() => setEditingName(true)}
-              >
-                Edit
-              </button>
-              <button
-                className="mini-button danger"
-                onClick={() => run(() => onDelete(checklist._id))}
-              >
-                Delete
-              </button>
-            </div>
-          </>
-        )}
-      </div>
-      <p className="progress">
-        {completeCount} of {checklist.items.length} completed
-      </p>
-      <ul className="item-list">
-        {checklist.items.map((item) => (
-          <li key={item._id} className={item.completed ? "done" : ""}>
-            <input
-              type="checkbox"
-              aria-label={`Complete ${item.title}`}
-              checked={item.completed}
-              onChange={() =>
-                run(() =>
-                  actions.item(checklist._id, item._id, {
-                    completed: !item.completed,
-                  }),
-                )
-              }
-            />
-            {editingId === item._id ? (
-              <form
-                className="inline-form item-edit"
-                onSubmit={(event) => {
-                  event.preventDefault();
-                  if (editValue.trim())
-                    run(async () => {
-                      await actions.item(checklist._id, item._id, {
-                        title: editValue.trim(),
-                      });
-                      setEditingId(null);
-                    });
-                }}
-              >
-                <input
-                  aria-label="Item title"
-                  value={editValue}
-                  onChange={(e) => setEditValue(e.target.value)}
-                  autoFocus
-                />
-                <button className="text-button">Save</button>
-              </form>
-            ) : (
-              <>
-                <span>{item.title}</span>
-                <button
-                  className="mini-button"
-                  onClick={() => {
-                    setEditingId(item._id);
-                    setEditValue(item.title);
-                  }}
-                >
-                  Edit
-                </button>
-              </>
-            )}
-            <button
-              className="mini-button danger"
-              aria-label={`Delete ${item.title}`}
-              onClick={() =>
-                run(() => actions.removeItem(checklist._id, item._id))
-              }
-            >
-              ×
-            </button>
-          </li>
-        ))}
-      </ul>
-      <form
-        className="add-item"
-        onSubmit={(event) => {
-          event.preventDefault();
-          if (newItem.trim())
-            run(async () => {
-              await actions.addItem(checklist._id, newItem.trim());
-              setNewItem("");
-            });
-        }}
-      >
-        <input
-          aria-label="New checklist item"
-          placeholder="Add an item"
-          value={newItem}
-          onChange={(e) => setNewItem(e.target.value)}
-        />
-        <button>Add</button>
-      </form>
-    </article>
-  );
+const toInputDate = (date) => (date ? String(date).slice(0, 10) : "");
+const scheduleFor = (item) => ({
+  start: toInputDate(item.startDate || item.dueDate),
+  end: toInputDate(item.endDate || item.startDate || item.dueDate),
+});
+const readableDate = (date) => new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric", year: "numeric" }).format(new Date(`${date}T00:00:00`));
+
+export default function ChecklistCard({ checklist, actions, onDelete, onError }) {
+  const [title, setTitle] = useState(""); const [startDate, setStartDate] = useState(""); const [endDate, setEndDate] = useState("");
+  const [editing, setEditing] = useState(null); const [editTitle, setEditTitle] = useState(""); const [editStart, setEditStart] = useState(""); const [editEnd, setEditEnd] = useState("");
+  const [editingName, setEditingName] = useState(false); const [name, setName] = useState(checklist.name);
+  const completed = checklist.items.filter((item) => item.completed).length;
+  const run = async (work) => { try { await work(); } catch (error) { onError(error.message); } };
+  const setStart = (value, edit = false) => { if (edit) { setEditStart(value); if (!value || !editEnd) setEditEnd(value); } else { setStartDate(value); if (!value || !endDate) setEndDate(value); } };
+  const label = (item) => { const { start, end } = scheduleFor(item); return start ? `${readableDate(start)}${end && end !== start ? ` to ${readableDate(end)}` : ""}` : "No schedule"; };
+  const saveTask = (event, itemId) => { event.preventDefault(); if (!editTitle.trim()) return; if (editStart && editEnd && editStart > editEnd) return onError("End date must be on or after the start date."); run(async () => { await actions.item(checklist._id, itemId, { title: editTitle.trim(), startDate: editStart || null, endDate: editEnd || null }); setEditing(null); }); };
+
+  return <article className="checklist-card"><div className="card-heading">{editingName ? <form className="inline-form" onSubmit={(e) => { e.preventDefault(); if (name.trim()) run(async () => { await actions.name(checklist._id, name.trim()); setEditingName(false); }); }}><input aria-label="Checklist name" value={name} onChange={(e) => setName(e.target.value)} autoFocus /><button className="text-button">Save</button></form> : <><h2>{checklist.name}</h2><div><button className="mini-button" onClick={() => setEditingName(true)}>Edit</button><button className="mini-button danger" onClick={() => run(() => onDelete(checklist._id))}>Delete</button></div></>}</div><p className="progress">{completed} of {checklist.items.length} completed</p><ul className="item-list">{checklist.items.map((item) => <li key={item._id} className={item.completed ? "done" : ""}><input type="checkbox" aria-label={`Complete ${item.title}`} checked={item.completed} onChange={() => run(() => actions.item(checklist._id, item._id, { completed: !item.completed }))} />{editing === item._id ? <form className="task-form task-edit" onSubmit={(e) => saveTask(e, item._id)}><input aria-label="Task title" value={editTitle} onChange={(e) => setEditTitle(e.target.value)} autoFocus /><label>Start date<input aria-label="Start date" type="date" value={editStart} onChange={(e) => setStart(e.target.value, true)} /></label><label>End date<input aria-label="End date" type="date" value={editEnd} min={editStart} onChange={(e) => setEditEnd(e.target.value)} /></label><button className="text-button" type="submit">Save changes</button><button className="mini-button" type="button" onClick={() => setEditing(null)}>Cancel</button></form> : <><div className="item-copy"><span>{item.title}</span><small className={item.startDate || item.dueDate ? "due-date" : ""}>{label(item)}</small></div><button className="mini-button" onClick={() => { const range = scheduleFor(item); setEditing(item._id); setEditTitle(item.title); setEditStart(range.start); setEditEnd(range.end); }}>Edit</button></>}<button className="mini-button danger" aria-label={`Delete ${item.title}`} onClick={() => run(() => actions.removeItem(checklist._id, item._id))}>×</button></li>)}</ul><form className="task-form" onSubmit={(e) => { e.preventDefault(); if (!title.trim()) return; if (startDate && endDate && startDate > endDate) return onError("End date must be on or after the start date."); run(async () => { await actions.addItem(checklist._id, title.trim(), startDate || null, endDate || null); setTitle(""); setStartDate(""); setEndDate(""); }); }}><input aria-label="New task" placeholder="Add a task" value={title} onChange={(e) => setTitle(e.target.value)} /><label>Start date<input aria-label="New task start date" type="date" value={startDate} onChange={(e) => setStart(e.target.value)} /></label><label>End date<input aria-label="New task end date" type="date" value={endDate} min={startDate} onChange={(e) => setEndDate(e.target.value)} /></label><button type="submit">Add task</button></form></article>;
 }

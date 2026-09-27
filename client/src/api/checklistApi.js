@@ -22,10 +22,10 @@ export const checklistApi = {
       body: JSON.stringify({ name }),
     }),
   remove: (id) => request(`/api/checklists/${id}`, { method: "DELETE" }),
-  addItem: (id, title) =>
+  addItem: (id, title, startDate, endDate) =>
     request(`/api/checklists/${id}/items`, {
       method: "POST",
-      body: JSON.stringify({ title }),
+      body: JSON.stringify({ title, startDate, endDate }),
     }),
   updateItem: (id, itemId, changes) =>
     request(`/api/checklists/${id}/items/${itemId}`, {

@@ -1,6 +1,8 @@
-# Checklist MERN App
+# TaskCanvas
 
-Full-stack checklist app with MongoDB, Express, React (Create React App), and Node.js.
+TaskCanvas is a full-stack task planning app built with MongoDB, Express, React (Create React App), and Node.js.
+
+Tasks can have optional start and end dates. The Monthly calendar page shows each task on every day in its planned date range.
 
 ## Setup
 
@@ -19,3 +21,5 @@ The UI uses `http://localhost:3000`; its development proxy sends API calls to `h
 - `PUT, DELETE /api/checklists/:checklistId/items/:itemId`
 
 The API validates request bodies with Joi and responds with JSON error messages.
+
+When creating or updating an item, send optional ISO `startDate` and `endDate` values, for example `{ "title": "Send report", "startDate": "2026-09-28", "endDate": "2026-09-30" }`.

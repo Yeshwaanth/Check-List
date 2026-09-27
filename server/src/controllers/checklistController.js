@@ -50,7 +50,11 @@ exports.addItem = async (req, res, next) => {
   try {
     const checklist = await findChecklist(req.params.checklistId);
     if (!checklist) return res.status(404).json({ message: 'Checklist not found.' });
-    checklist.items.push({ title: req.body.title });
+    checklist.items.push({
+      title: req.body.title,
+      startDate: req.body.startDate || null,
+      endDate: req.body.endDate || null,
+    });
     await checklist.save();
     return res.status(201).json(checklist);
   } catch (error) { return next(error); }
@@ -64,6 +68,11 @@ exports.updateItem = async (req, res, next) => {
     if (!item) return res.status(404).json({ message: 'Checklist item not found.' });
     if (req.body.title !== undefined) item.title = req.body.title;
     if (req.body.completed !== undefined) item.completed = req.body.completed;
+    if (req.body.startDate !== undefined) item.startDate = req.body.startDate || null;
+    if (req.body.endDate !== undefined) item.endDate = req.body.endDate || null;
+    if (item.startDate && item.endDate && item.startDate > item.endDate) {
+      return res.status(400).json({ message: 'End date must be on or after the start date.' });
+    }
     await checklist.save();
     return res.json(checklist);
   } catch (error) { return next(error); }
